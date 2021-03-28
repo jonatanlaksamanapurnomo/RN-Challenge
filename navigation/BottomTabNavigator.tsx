@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
+import MainScreen from '../screens/MainScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import {BottomTabParamList, TabOneParamList, TabTwoParamList} from '../types';
 
@@ -18,20 +18,21 @@ export default function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="TabOne"
             tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
+            {/*<BottomTab.Screen*/}
+            {/*    name="TabTwo"*/}
+            {/*    component={TabTwoNavigator}*/}
+            {/*    options={{*/}
+            {/*        tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,*/}
+            {/*    }}*/}
+            {/*/>*/}
             <BottomTab.Screen
-                name="To Do"
+                name="Calendar"
                 component={TabOneNavigator}
                 options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="briefcase-outline" color={color}/>,
+                    tabBarIcon: ({color}) => <TabBarIcon name="calendar-outline" color={color}/>,
                 }}
             />
-            <BottomTab.Screen
-                name="TabTwo"
-                component={TabTwoNavigator}
-                options={{
-                    tabBarIcon: ({color}) => <TabBarIcon name="ios-code" color={color}/>,
-                }}
-            />
+
         </BottomTab.Navigator>
     );
 }
@@ -51,7 +52,7 @@ function TabOneNavigator() {
         <TabOneStack.Navigator>
             <TabOneStack.Screen
                 name="TabOneScreen"
-                component={TabOneScreen}
+                component={MainScreen}
                 options={{headerShown: false}}
             />
         </TabOneStack.Navigator>

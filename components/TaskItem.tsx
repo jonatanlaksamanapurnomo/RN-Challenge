@@ -1,40 +1,38 @@
 import * as  React from 'react';
-import {Text, View} from "react-native";
-import {StyleSheet} from "react-native";
+import {Text, View, TouchableHighlight, StyleSheet} from "react-native";
 import {useState} from "react";
 
-const TaskItem = ({item}) => {
+const TaskItem = ({item}: any) => {
     let [visible, setVisible] = useState(false);
     const handleOnTouchHeader = () => {
         setVisible(!visible)
     }
     return (
-        <View style={styles.itemContainer}>
-            <View onTouchStart={handleOnTouchHeader} style={styles.item}>
+        <TouchableHighlight activeOpacity={0.6}
+                            underlayColor="#DDDDDD" onPress={handleOnTouchHeader} style={styles.item}>
+            <View style={styles.itemContainer}>
                 <View style={styles.itemLeft}>
-                    <View style={[styles.square, {backgroundColor: item.id % 2 === 0 ? "#55BCF6" : "orange"}]}></View>
-                    <Text style={styles.itemText}>{item.title}</Text>
+                    <View style={[styles.square, {backgroundColor: item.status ? "#55BCF6" : "green"}]}></View>
+                    <Text style={styles.itemText}>{item.taskName}</Text>
                 </View>
-                <View style={styles.circular}></View>
+                <View style={[styles.itemDetail, {display: visible ? "flex" : "none"}]}>
+                    <Text style={styles.itemText}>{item.taskDate.toString()}</Text>
+                </View>
             </View>
-            <View style={[styles.itemDetail, {display: visible ? "flex" : "none"}]}>
-                <Text style={styles.itemText}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
-                    delectus dolore, dolores
-                    eaque expedita modi non quas quo quos tenetur.</Text>
-            </View>
-        </View>
+        </TouchableHighlight>
     );
 };
 const styles = StyleSheet.create({
     itemContainer: {
-        marginBottom: 20,
+        marginBottom: 10,
         paddingHorizontal: "5%"
     },
     item: {
         flex: 1,
         backgroundColor: '#FFF',
         padding: 15,
-        borderRadius: 10,
+        borderRadius: 30,
+        marginBottom: "5%",
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -65,6 +63,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     itemDetail: {
+        marginTop: "5%",
         backgroundColor: "#fff",
         borderRadius: 10,
     }
