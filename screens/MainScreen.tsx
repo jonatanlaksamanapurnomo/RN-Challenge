@@ -32,7 +32,6 @@ export default function MainScreen() {
     }, [])
 
     useEffect(() => {
-
         getTasksCallBacks()
     }, [taskUpdate])
 
@@ -46,6 +45,9 @@ export default function MainScreen() {
         }
     }
     const handleDateChange = (e: any) => {
+        getTasks(e).then((res: any) => {
+            setTasks(res)
+        })
         setDate(e.toDate())
     }
     const handleSwipe = ({direction, value, key}: any) => {

@@ -2,27 +2,34 @@ import firebase from "../config/firebase";
 
 const db = firebase.firestore().collection('tasks');
 
+const isSameDay = (firstTimeStamp, secondTimeStamp) => {
+    return (new Date(firstTimeStamp).getDate() === (new Date(secondTimeStamp).getDate()))
+}
+
+const timeStampToDate = (timeStamp) => {
+    return (new Date(timeStamp))
+}
 
 const getTasks = async (selectedDate = null) => {
     let tasks: any[] = [];
-
+    let dateNow = new Date().setHours(0, 0, 0, 0)
+    if (selectedDate !== null) {
+        dateNow = Date.parse(selectedDate)
+    }
+    // console.log(dateNow)
     return await db.get()
         .then((snapshot) => {
             snapshot.forEach(doc => {
-                tasks.push({
-                    id: doc.id,
-                    taskDate: doc.data().task_date,
-                    status: doc.data().status,
-                    taskName: doc.data().task_name,
-                });
+                if (isSameDay(doc.data().task_date.seconds * 1000, dateNow)) {
+                    tasks.push({
+                        id: doc.id,
+                        taskDate: doc.data().task_date.seconds,
+                        status: doc.data().status,
+                        taskName: doc.data().task_name,
+                    });
+                }
             });
-
-            if (selectedDate !== null) {
-                return [];
-            } else {
-                return tasks
-            }
-
+            return tasks;
         }).catch((e) => {
             new Error(e.message)
         });
@@ -42,4 +49,4 @@ const deleteTodo = async (id: String) => {
     return "sukses";
 }
 
-export {getTasks, addTodo, deleteTodo}
+export {getTasks, addTodo, deleteTodo, timeStampToDate}

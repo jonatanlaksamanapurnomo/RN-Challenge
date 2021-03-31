@@ -1,6 +1,7 @@
 import * as  React from 'react';
 import {Text, View, TouchableHighlight, StyleSheet} from "react-native";
 import {useState} from "react";
+import {timeStampToDate} from "../models/TodoModel";
 
 const TaskItem = ({item}: any) => {
     let [visible, setVisible] = useState(false);
@@ -16,7 +17,7 @@ const TaskItem = ({item}: any) => {
                     <Text style={styles.itemText}>{item.taskName}</Text>
                 </View>
                 <View style={[styles.itemDetail, {display: visible ? "flex" : "none"}]}>
-                    <Text style={styles.itemText}>{item.taskDate.toString()}</Text>
+                    <Text style={styles.itemText}>{timeStampToDate(item.taskDate * 1000).toDateString()}</Text>
                 </View>
             </View>
         </TouchableHighlight>
