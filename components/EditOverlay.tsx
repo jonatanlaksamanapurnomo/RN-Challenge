@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
-import Overlay from 'react-native-modal-overlay';
-import {TextInput, StyleSheet, TouchableOpacity} from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import {Ionicons} from "@expo/vector-icons";
+import * as React from 'react';
 import {Text} from "./Themed";
+import Overlay from 'react-native-modal-overlay';
+import {StyleSheet, TextInput, TouchableOpacity} from "react-native";
+import {useState} from "react";
 import {addTodo} from "../models/TodoModel";
-import EditOverlay from "./EditOverlay";
+import {Ionicons} from "@expo/vector-icons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-
-const AddOverlay = ({modalVisible, onClose, selectedDate}: any) => {
+const EditOverlay = ({isVisible, onClose}: any) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState<Boolean>(false);
     const [message, setMessage] = useState<String>("");
     const showDatePicker = () => {
@@ -24,19 +23,18 @@ const AddOverlay = ({modalVisible, onClose, selectedDate}: any) => {
         hideDatePicker();
     };
     const handleCreateTask = () => {
-        addTodo(message, selectedDate).then(res => {
-            if (res) {
-                onClose()
-            }
-        })
+        // addTodo(message, selectedDate).then(res => {
+        //     if (res) {
+        //         onClose()
+        //     }
+        // })
     }
     return (
-        <Overlay visible={modalVisible} onClose={onClose} closeOnTouchOutside animationType="zoomIn"
+        <Overlay visible={isVisible} onClose={onClose} closeOnTouchOutside animationType="zoomIn"
                  containerStyle={styles.containerStyle}
                  childrenWrapperStyle={styles.childrenWrapperStyle}
                  animationDuration={500}>
-            <Text style={styles.selectedDate}>Create ToDo
-                for: {selectedDate.toString().split(" ").slice(0, 4).join(" ")}</Text>
+
             <TextInput onChangeText={handleChangeText} style={styles.textInputStyle} placeholder={"write here.."}/>
             <TouchableOpacity onPress={showDatePicker} style={styles.addBtnStyle}>
                 <Ionicons name="time-outline" size={20} color={"white"}/>
@@ -47,24 +45,15 @@ const AddOverlay = ({modalVisible, onClose, selectedDate}: any) => {
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="time"
-                date={selectedDate}
                 is24Hour={true}
                 onConfirm={handleConfirmHour}
                 onCancel={hideDatePicker}
             />
         </Overlay>
+
     );
 };
-
 const styles = StyleSheet.create({
-    selectedDate: {
-        fontFamily: "regular",
-        paddingHorizontal: "5%",
-        marginBottom: "5%",
-        backgroundColor: "#f2b722",
-        color: "white",
-        alignItems: "center"
-    },
     containerStyle: {
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
     },
@@ -95,4 +84,4 @@ const styles = StyleSheet.create({
         backgroundColor: "#55BCF6"
     }
 })
-export default AddOverlay;
+export default EditOverlay;

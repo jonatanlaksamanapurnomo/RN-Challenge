@@ -8,6 +8,11 @@ export default {
         tint: tintColorLight,
         tabIconDefault: '#ccc',
         tabIconSelected: tintColorLight,
+        blue: "#55BCF6",
+        calendar: {
+            dateColor: "#f2b722",
+            selectedColor: "#ff99f1"
+        }
     },
     dark: {
         text: '#fff',

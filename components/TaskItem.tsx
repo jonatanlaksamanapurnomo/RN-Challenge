@@ -1,16 +1,25 @@
 import * as  React from 'react';
-import {Text, View, TouchableHighlight, StyleSheet} from "react-native";
+import {Text, View, TouchableHighlight, StyleSheet, Button} from "react-native";
 import {useState} from "react";
 import {timeStampToDate} from "../models/TodoModel";
+import EditOverlay from "../components/EditOverlay";
 
 const TaskItem = ({item}: any) => {
     let [visible, setVisible] = useState(false);
+    let [modalEditStatus, setModalEdit] = useState(false);
     const handleOnTouchHeader = () => {
         setVisible(!visible)
     }
+    const handleOnLongPress = () => {
+        setModalEdit(true)
+    }
+    const handleOnCloseModal = () => {
+        setModalEdit(false)
+    }
     return (
         <TouchableHighlight activeOpacity={0.6}
-                            underlayColor="#DDDDDD" onPress={handleOnTouchHeader} style={styles.item}>
+                            onLongPress={handleOnLongPress} underlayColor="#DDDDDD" onPress={handleOnTouchHeader}
+                            style={styles.item}>
             <View style={styles.itemContainer}>
                 <View style={styles.itemLeft}>
                     <View style={[styles.square, {backgroundColor: item.status ? "#55BCF6" : "green"}]}></View>
@@ -19,6 +28,7 @@ const TaskItem = ({item}: any) => {
                 <View style={[styles.itemDetail, {display: visible ? "flex" : "none"}]}>
                     <Text style={styles.itemText}>{timeStampToDate(item.taskDate * 1000).toDateString()}</Text>
                 </View>
+                <EditOverlay isVisible={modalEditStatus} onClose={handleOnCloseModal}/>
             </View>
         </TouchableHighlight>
     );
@@ -30,13 +40,11 @@ const styles = StyleSheet.create({
     },
     item: {
         flex: 1,
+        flexDirection: "row",
         backgroundColor: '#FFF',
         padding: 15,
         borderRadius: 30,
         marginBottom: "5%",
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
 
     },
     itemLeft: {

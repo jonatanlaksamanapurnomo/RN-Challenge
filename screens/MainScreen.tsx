@@ -9,15 +9,16 @@ import SwipeAction from "../components/SwipeAction";
 import AddOverlay from "../components/AddOverlay";
 import {useState, useEffect, useCallback} from "react";
 import {getTasksByDate, deleteTodo, getTasks, updateTodo} from "../models/TodoModel";
-import moment from "moment";
+import Colors from "../constants/Colors";
 
+import moment from "moment";
 
 const actions = [
     {
         text: "Add Task",
         name: "add_todo",
         position: 2,
-        color: "#55BCF6",
+        color: Colors.light.blue,
         icon: require("../assets/images/clipboard.png")
     }
 ];
@@ -27,11 +28,12 @@ export default function MainScreen() {
     const [taskUpdate, setTaskUpdate] = useState<Boolean>(false);
     const [tasks, setTasks] = useState([])
     const [taskLists, setAllTaskLists] = useState([])
+
     const getTasksCallBacks = useCallback(() => {
         getTasksByDate().then((snap: any) => {
             setTasks(snap)
         })
-    }, [])
+    }, [taskUpdate])
 
     const getAllTask = useCallback(() => {
         getTasks().then((snap: any) => {
@@ -41,7 +43,7 @@ export default function MainScreen() {
                 taskList.push({
                     date: moment(item.taskDate * 1000),
                     // Random colors
-                    style: {backgroundColor: '#f2b722'},
+                    style: {backgroundColor: Colors.light.calendar.dateColor},
                     textStyle: {color: 'black'}, // sets the font color
                     containerStyle: [], // extra styling for day container
                     allowDisabled: true, // allow custom style to apply to disabled dates
@@ -52,6 +54,7 @@ export default function MainScreen() {
         })
     }, [])
 
+
     useEffect(() => {
         getTasksCallBacks()
         getAllTask()
@@ -61,6 +64,7 @@ export default function MainScreen() {
         setTaskUpdate(!taskUpdate)
         setVisible(false)
     }
+
     const handleFabClick = (name: String) => {
         if (name === "add_todo") {
             setVisible(true)
@@ -77,12 +81,15 @@ export default function MainScreen() {
             if (value >= 150) {
                 deleteTodo(key).then(() => {
                     setTaskUpdate(!taskUpdate)
+                    alert("Task Deleted")
                 })
             }
         } else {
             if (value <= -150) {
                 updateTodo(key).then(() => {
                     setTaskUpdate(!taskUpdate)
+                    alert("Task Updated")
+
                 })
             }
         }
@@ -94,8 +101,8 @@ export default function MainScreen() {
                     <CalendarPicker
                         customDatesStyles={taskLists}
                         startFromMonday={true}
-                        todayBackgroundColor="#f2e6ff"
-                        selectedDayColor="#7300e6"
+                        todayBackgroundColor={Colors.light.tint}
+                        selectedDayColor={Colors.light.calendar.selectedColor}
                         selectedDayTextColor="#FFFFFF"
                         onDateChange={handleDateChange}
                     />
@@ -104,7 +111,7 @@ export default function MainScreen() {
                     <View style={styles.subSectionWrapper}>
                         <Text style={styles.title}>Today's Task</Text>
                     </View>
-                    <View style={styles.taskListWrapper}>
+                    {tasks.length > 0 && (<View style={styles.taskListWrapper}>
                         <SwipeListView
                             data={tasks}
                             keyExtractor={(item: any, index) => item.id}
@@ -114,25 +121,32 @@ export default function MainScreen() {
                             leftOpenValue={75}
                             rightOpenValue={-75}
                         />
-                    </View>
+                    </View>)}
+                    {tasks.length <= 0 && (
+                        <Text style={{textAlign: "center"}}>No Task's For Today</Text>
+                    )}
+
                 </View>
             </ScrollView>
             <FloatingAction
-                color="#55BCF6"
+                color={Colors.light.blue}
                 actions={actions}
                 position="right"
                 onPressItem={handleFabClick}
             />
+
             <AddOverlay modalVisible={modalVisible} selectedDate={selectedDate} onClose={handleOnCloseModal}/>
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         paddingVertical: "4%",
         marginTop: StatusBar.currentHeight,
-        flexDirection: "column"
+        flexDirection: "row"
     },
     title: {
         paddingHorizontal: "5%",
