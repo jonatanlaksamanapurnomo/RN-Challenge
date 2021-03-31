@@ -25,7 +25,7 @@ const AddOverlay = ({modalVisible, onClose, selectedDate}: any) => {
         hideDatePicker();
     };
     const handleCreateTask = () => {
-        addTodo(message, finalDate).then(res => {
+        addTodo(message, selectedDate).then(res => {
             if (res) {
                 onClose()
             }
@@ -37,7 +37,7 @@ const AddOverlay = ({modalVisible, onClose, selectedDate}: any) => {
                  childrenWrapperStyle={styles.childrenWrapperStyle}
                  animationDuration={500}>
             <Text style={styles.selectedDate}>Create ToDo
-                at: {selectedDate.toString().split(" ").slice(0, 4).join(" ")}</Text>
+                for: {selectedDate.toString().split(" ").slice(0, 4).join(" ")}</Text>
             <TextInput onChangeText={handleChangeText} style={styles.textInputStyle} placeholder={"write here.."}/>
             <TouchableOpacity onPress={showDatePicker} style={styles.addBtnStyle}>
                 <Ionicons name="time-outline" size={20} color={"white"}/>
@@ -61,7 +61,10 @@ const styles = StyleSheet.create({
     selectedDate: {
         fontFamily: "regular",
         paddingHorizontal: "5%",
-        marginBottom: "5%"
+        marginBottom: "5%",
+        backgroundColor: "#f2b722",
+        color: "white",
+        alignItems: "center"
     },
     containerStyle: {
         backgroundColor: 'rgba(0, 0, 0, 0.3)',

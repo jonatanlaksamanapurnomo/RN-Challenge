@@ -8,7 +8,8 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import SwipeAction from "../components/SwipeAction";
 import AddOverlay from "../components/AddOverlay";
 import {useState, useEffect, useCallback} from "react";
-import {getTasks, deleteTodo} from "../models/TodoModel";
+import {getTasksByDate, deleteTodo, getTasks, updateTodo} from "../models/TodoModel";
+import moment from "moment";
 
 
 const actions = [
@@ -25,14 +26,35 @@ export default function MainScreen() {
     const [selectedDate, setDate] = useState<Date>(new Date());
     const [taskUpdate, setTaskUpdate] = useState<Boolean>(false);
     const [tasks, setTasks] = useState([])
+    const [taskLists, setAllTaskLists] = useState([])
     const getTasksCallBacks = useCallback(() => {
-        getTasks().then(snap => {
+        getTasksByDate().then((snap: any) => {
             setTasks(snap)
+        })
+    }, [])
+
+    const getAllTask = useCallback(() => {
+        getTasks().then((snap: any) => {
+            // console.log(moment(snap[0].taskDate * 1000))
+            let taskList: any = [];
+            snap.forEach((item: any) => {
+                taskList.push({
+                    date: moment(item.taskDate * 1000),
+                    // Random colors
+                    style: {backgroundColor: '#f2b722'},
+                    textStyle: {color: 'black'}, // sets the font color
+                    containerStyle: [], // extra styling for day container
+                    allowDisabled: true, // allow custom style to apply to disabled dates
+                })
+            })
+            setAllTaskLists(taskList)
+
         })
     }, [])
 
     useEffect(() => {
         getTasksCallBacks()
+        getAllTask()
     }, [taskUpdate])
 
     const handleOnCloseModal = () => {
@@ -45,7 +67,7 @@ export default function MainScreen() {
         }
     }
     const handleDateChange = (e: any) => {
-        getTasks(e).then((res: any) => {
+        getTasksByDate(e).then((res: any) => {
             setTasks(res)
         })
         setDate(e.toDate())
@@ -57,6 +79,12 @@ export default function MainScreen() {
                     setTaskUpdate(!taskUpdate)
                 })
             }
+        } else {
+            if (value <= -150) {
+                updateTodo(key).then(() => {
+                    setTaskUpdate(!taskUpdate)
+                })
+            }
         }
     }
     return (
@@ -64,6 +92,7 @@ export default function MainScreen() {
             <ScrollView>
                 <View style={styles.calendarWrapper}>
                     <CalendarPicker
+                        customDatesStyles={taskLists}
                         startFromMonday={true}
                         todayBackgroundColor="#f2e6ff"
                         selectedDayColor="#7300e6"
@@ -73,12 +102,12 @@ export default function MainScreen() {
                 </View>
                 <View style={styles.taskWrapper}>
                     <View style={styles.subSectionWrapper}>
-                        <Text style={styles.title}>Your Task</Text>
+                        <Text style={styles.title}>Today's Task</Text>
                     </View>
                     <View style={styles.taskListWrapper}>
                         <SwipeListView
                             data={tasks}
-                            keyExtractor={(item, index) => item.id}
+                            keyExtractor={(item: any, index) => item.id}
                             onSwipeValueChange={handleSwipe}
                             renderItem={(data) => (<TaskItem item={data.item}/>)}
                             renderHiddenItem={(data) => (<SwipeAction/>)}
