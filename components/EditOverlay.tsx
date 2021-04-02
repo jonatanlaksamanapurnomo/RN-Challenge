@@ -1,33 +1,23 @@
 import * as React from 'react';
-import {Text} from "./Themed";
 import Overlay from 'react-native-modal-overlay';
 import {StyleSheet, TextInput, TouchableOpacity} from "react-native";
 import {useState} from "react";
-import {addTodo} from "../models/TodoModel";
+import {editTodo} from "../models/TodoModel";
 import {Ionicons} from "@expo/vector-icons";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const EditOverlay = ({isVisible, onClose}: any) => {
-    const [isDatePickerVisible, setDatePickerVisibility] = useState<Boolean>(false);
+const EditOverlay = ({isVisible, onClose, dataId}: any) => {
     const [message, setMessage] = useState<String>("");
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
+
+
     const handleChangeText = (e: String) => {
         setMessage(e)
     }
-    const handleConfirmHour = (date: Date) => {
-        hideDatePicker();
-    };
     const handleCreateTask = () => {
-        // addTodo(message, selectedDate).then(res => {
-        //     if (res) {
-        //         onClose()
-        //     }
-        // })
+        editTodo(dataId, message).then(res => {
+            if (res) {
+                onClose()
+            }
+        })
     }
     return (
         <Overlay visible={isVisible} onClose={onClose} closeOnTouchOutside animationType="zoomIn"
@@ -35,20 +25,10 @@ const EditOverlay = ({isVisible, onClose}: any) => {
                  childrenWrapperStyle={styles.childrenWrapperStyle}
                  animationDuration={500}>
 
-            <TextInput onChangeText={handleChangeText} style={styles.textInputStyle} placeholder={"write here.."}/>
-            <TouchableOpacity onPress={showDatePicker} style={styles.addBtnStyle}>
-                <Ionicons name="time-outline" size={20} color={"white"}/>
-            </TouchableOpacity>
+            <TextInput onChangeText={handleChangeText} style={styles.textInputStyle} placeholder={"Edit Todo here.."}/>
             <TouchableOpacity onPress={handleCreateTask} style={styles.addBtnStyle}>
                 <Ionicons name="add-outline" size={20} color={"white"}/>
             </TouchableOpacity>
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="time"
-                is24Hour={true}
-                onConfirm={handleConfirmHour}
-                onCancel={hideDatePicker}
-            />
         </Overlay>
 
     );

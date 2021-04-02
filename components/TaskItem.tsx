@@ -28,7 +28,7 @@ const TaskItem = ({item}: any) => {
                 <View style={[styles.itemDetail, {display: visible ? "flex" : "none"}]}>
                     <Text style={styles.itemText}>{timeStampToDate(item.taskDate * 1000).toDateString()}</Text>
                 </View>
-                <EditOverlay isVisible={modalEditStatus} onClose={handleOnCloseModal}/>
+                <EditOverlay isVisible={modalEditStatus} dataId={item.id} onClose={handleOnCloseModal}/>
             </View>
         </TouchableHighlight>
     );

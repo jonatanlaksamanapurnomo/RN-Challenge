@@ -81,15 +81,12 @@ export default function MainScreen() {
             if (value >= 150) {
                 deleteTodo(key).then(() => {
                     setTaskUpdate(!taskUpdate)
-                    alert("Task Deleted")
                 })
             }
         } else {
             if (value <= -150) {
                 updateTodo(key).then(() => {
                     setTaskUpdate(!taskUpdate)
-                    alert("Task Updated")
-
                 })
             }
         }
@@ -117,7 +114,7 @@ export default function MainScreen() {
                             keyExtractor={(item: any, index) => item.id}
                             onSwipeValueChange={handleSwipe}
                             renderItem={(data) => (<TaskItem item={data.item}/>)}
-                            renderHiddenItem={(data) => (<SwipeAction/>)}
+                            renderHiddenItem={(data) => (<SwipeAction data={data}/>)}
                             leftOpenValue={75}
                             rightOpenValue={-75}
                         />

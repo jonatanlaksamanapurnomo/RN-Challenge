@@ -73,5 +73,11 @@ const updateTodo = async (id: any) => {
     })
     return "updated"
 }
+const editTodo = async (id: any, name: String) => {
+    await db.doc(id).update({
+        task_name: name,
+    })
+}
 
-export {getTasksByDate, addTodo, deleteTodo, timeStampToDate, getTasks, updateTodo}
+
+export {getTasksByDate, addTodo, deleteTodo, timeStampToDate, getTasks, updateTodo, editTodo}

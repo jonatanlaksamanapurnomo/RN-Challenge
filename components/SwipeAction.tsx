@@ -3,21 +3,25 @@ import {View} from "./Themed";
 import {StyleSheet} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 
-const SwipeAction = () => {
+const SwipeAction = ({data}: any) => {
     const handleDelete = () => {
-        console.log("Delete")
+        alert("Swipe Right To Delete")
     }
 
     const handleDone = () => {
-        console.log("Done")
+        const {status} = data;
+        if (status) {
+            alert("Swipe Left To Delete")
+        }
+        alert("You Can't Do This Action")
     }
     return (
         <View style={styles.rowBack}>
             <View>
-                <Ionicons onPress={handleDelete} style={styles.deleteIcon} name="trash-outline" size={15}/>
+                <Ionicons onPress={handleDelete} style={styles.deleteIcon} name="arrow-forward-outline" size={15}/>
             </View>
             <View>
-                <Ionicons onPress={handleDone} style={styles.doneIcon} name="checkmark-done-outline" size={15}/>
+                <Ionicons onPress={handleDone} style={styles.doneIcon} name="arrow-back-outline" size={15}/>
             </View>
 
         </View>

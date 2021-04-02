@@ -5,7 +5,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {Ionicons} from "@expo/vector-icons";
 import {Text} from "./Themed";
 import {addTodo} from "../models/TodoModel";
-import EditOverlay from "./EditOverlay";
 
 
 const AddOverlay = ({modalVisible, onClose, selectedDate}: any) => {
